@@ -31,4 +31,23 @@ class DynamoDbAutoconfigurationTest {
             );
     }
 
+    @Test
+    void whenProvideCustomConnectionDetailsThenUseIt(){
+        contextRunner
+                .withBean(DynamoDbConnectionDetails.class, CustomDynamoDbConnectionDetails::new)
+                .run(context -> {
+                    assertThat(context).hasSingleBean(CustomDynamoDbConnectionDetails.class);
+                    assertThat(context).doesNotHaveBean(PropertiesDynamoDbConnectionDetails.class);
+                }
+        );
+    }
+
+    private static class CustomDynamoDbConnectionDetails implements DynamoDbConnectionDetails {
+
+        @Override
+        public String endpointOverride() {
+            return "http://custom.localhost:8000";
+        }
+    }
+
 }
