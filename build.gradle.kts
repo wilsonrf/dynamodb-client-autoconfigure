@@ -21,6 +21,8 @@ dependencies {
     implementation("software.amazon.awssdk:dynamodb-enhanced")
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.testcontainers:testcontainers")
+    testImplementation("org.testcontainers:junit-jupiter")
 }
 
 tasks.test {
