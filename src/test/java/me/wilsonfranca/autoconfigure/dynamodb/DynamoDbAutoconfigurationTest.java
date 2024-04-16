@@ -3,6 +3,7 @@ package me.wilsonfranca.autoconfigure.dynamodb;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,6 +39,25 @@ class DynamoDbAutoconfigurationTest {
                 .run(context -> {
                     assertThat(context).hasSingleBean(CustomDynamoDbConnectionDetails.class);
                     assertThat(context).doesNotHaveBean(PropertiesDynamoDbConnectionDetails.class);
+                }
+        );
+    }
+
+    @Test
+    void shouldHaveEndpointOverrideCustomizerWhenEndpointOverrideIsProvided(){
+        contextRunner
+                .withPropertyValues("dynamodb.endpoint-override=http://localhost:8000")
+                .run(context -> {
+                    assertThat(context).hasSingleBean(EndpointOverrideDynamoDbClientBuilderCustomizer.class);
+                }
+        );
+    }
+
+    @Test
+    void shouldNotHaveEndpointOverrideCustomizerWhenEndpointOverrideIsNotProvided(){
+        contextRunner
+                .run(context -> {
+                    assertThat(context).doesNotHaveBean(EndpointOverrideDynamoDbClientBuilderCustomizer.class);
                 }
         );
     }
