@@ -1,9 +1,13 @@
 package me.wilsonfranca.autoconfigure.dynamodb;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.junit.jupiter.Container;
@@ -24,7 +28,7 @@ import static software.amazon.awssdk.enhanced.dynamodb.mapper.StaticAttributeTag
 class DynamoDbAutoconfigurationIntegrationTest {
 
     static final int DYNAMO_DB_PORT = 8000;
-    private static final Logger logger = org.slf4j.LoggerFactory.getLogger(DynamoDbAutoconfigurationIntegrationTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(DynamoDbAutoconfigurationIntegrationTest.class);
     private static final Slf4jLogConsumer logConsumer = new Slf4jLogConsumer(logger);
 
     @Container
@@ -33,18 +37,18 @@ class DynamoDbAutoconfigurationIntegrationTest {
             .withExposedPorts(DYNAMO_DB_PORT);
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
-            .withConfiguration(AutoConfigurations.of(DynamoDbAutoconfiguration.class))
-            .withPropertyValues("dynamodb.endpoint-override=http://localhost:" + dynamoDb.getMappedPort(DYNAMO_DB_PORT));
+            .withConfiguration(AutoConfigurations.of(DynamoDbAutoconfiguration.class));
 
-    private DynamoDbTable<TestTable> testTableDynamoDbTable;
 
     @Test
     void clientCanConnectWithEndpointOverride() {
-        contextRunner.run(context -> {
+        contextRunner
+                .withPropertyValues("dynamodb.endpoint-override=http://localhost:" + dynamoDb.getMappedPort(DYNAMO_DB_PORT))
+                .run(context -> {
             assertTrue(context.containsBean("dynamoDbClient"));
             assertNotNull(context.getBean(DynamoDbClient.class));
             DynamoDbClient dynamoDbClient = context.getBean(DynamoDbClient.class);
-            testTableDynamoDbTable = DynamoDbEnhancedClient
+                    DynamoDbTable<TestTable> testTableDynamoDbTable = DynamoDbEnhancedClient
                     .builder()
                     .dynamoDbClient(dynamoDbClient)
                     .build()
@@ -53,6 +57,8 @@ class DynamoDbAutoconfigurationIntegrationTest {
                     t.readCapacityUnits(5L).writeCapacityUnits(5L)));
             testTableDynamoDbTable.putItem(new TestTable("1"));
             assertThat(testTableDynamoDbTable.scan().items().stream().toList()).hasSize(1);
+            testTableDynamoDbTable.deleteTable();
+
         });
     }
 
