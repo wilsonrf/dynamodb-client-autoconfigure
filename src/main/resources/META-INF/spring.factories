@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.service.connection.ConnectionDetailsFactory=\
+me.wilsonfranca.service.connection.dynamodb.DynamoDbContainerConnectionDetailsFactory
