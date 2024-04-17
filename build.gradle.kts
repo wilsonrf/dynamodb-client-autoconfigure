@@ -1,5 +1,6 @@
 plugins {
     id("java")
+    id("java-library")
     id("org.springframework.boot") version "3.2.4"
     id("io.spring.dependency-management") version "1.1.3"
     id("com.github.ben-manes.versions") version "0.51.0"
@@ -17,7 +18,7 @@ val awsSdkVersion: String by project
 dependencies {
     implementation("org.testcontainers:testcontainers")
     implementation("org.springframework.boot:spring-boot-testcontainers")
-    implementation(platform("software.amazon.awssdk:bom:$awsSdkVersion"))
+    api(platform("software.amazon.awssdk:bom:$awsSdkVersion"))
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("software.amazon.awssdk:dynamodb")
     implementation("software.amazon.awssdk:dynamodb-enhanced")

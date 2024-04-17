@@ -11,7 +11,6 @@ import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -35,7 +34,7 @@ class DynamoDbContainerConnectionDetailsFactoryIntegrationTest {
 
     @Container
     @ServiceConnection(value = "dynamoDb")
-    private static final GenericContainer dynamoDb = new GenericContainer("amazon/dynamodb-local:latest")
+    private static final DynamoDbContainer dynamoDb = new DynamoDbContainer("amazon/dynamodb-local:latest")
             .withExposedPorts(DYNAMODB_PORT)
             .withLogConsumer(logConsumer);
 
