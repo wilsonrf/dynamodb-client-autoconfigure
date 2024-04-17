@@ -15,9 +15,7 @@ class DynamoDbAutoconfigurationTest {
 
     @Test
     void clientExists(){
-        contextRunner.run(context -> {
-            assertTrue(context.containsBean("dynamoDbClient"));
-        });
+        contextRunner.run(context -> assertTrue(context.containsBean("dynamoDbClient")));
     }
 
     @Test
@@ -25,9 +23,7 @@ class DynamoDbAutoconfigurationTest {
         contextRunner
                 .withUserConfiguration(DynamoDbTestConfiguration.class)
                 .withPropertyValues("dynamodb.endpoint-override=http://localhost:8000")
-                .run(context -> {
-                    assertThat(context).hasSingleBean(PropertiesDynamoDbConnectionDetails.class);
-                }
+                .run(context -> assertThat(context).hasSingleBean(PropertiesDynamoDbConnectionDetails.class)
             );
     }
 
@@ -46,9 +42,7 @@ class DynamoDbAutoconfigurationTest {
     void shouldHaveEndpointOverrideCustomizerWhenEndpointOverrideIsProvided(){
         contextRunner
                 .withPropertyValues("dynamodb.endpoint-override=http://localhost:8000")
-                .run(context -> {
-                    assertThat(context).hasSingleBean(EndpointOverrideDynamoDbClientBuilderCustomizer.class);
-                }
+                .run(context -> assertThat(context).hasSingleBean(EndpointOverrideDynamoDbClientBuilderCustomizer.class)
         );
     }
 

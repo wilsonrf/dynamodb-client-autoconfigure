@@ -1,13 +1,10 @@
 package me.wilsonfranca.autoconfigure.dynamodb;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.junit.jupiter.Container;
@@ -32,7 +29,7 @@ class DynamoDbAutoconfigurationIntegrationTest {
     private static final Slf4jLogConsumer logConsumer = new Slf4jLogConsumer(logger);
 
     @Container
-    static final GenericContainer dynamoDb = new GenericContainer("amazon/dynamodb-local:latest")
+    private static final GenericContainer dynamoDb = new GenericContainer("amazon/dynamodb-local:latest")
             .withLogConsumer(logConsumer)
             .withExposedPorts(DYNAMO_DB_PORT);
 

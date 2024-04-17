@@ -35,7 +35,7 @@ class DynamoDbContainerConnectionDetailsFactoryIntegrationTest {
 
     @Container
     @ServiceConnection(value = "dynamoDb")
-    static final GenericContainer dynamoDb = new GenericContainer("amazon/dynamodb-local:latest")
+    private static final GenericContainer dynamoDb = new GenericContainer("amazon/dynamodb-local:latest")
             .withExposedPorts(DYNAMODB_PORT)
             .withLogConsumer(logConsumer);
 
