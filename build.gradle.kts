@@ -19,6 +19,10 @@ plugins {
     id("org.springframework.boot") version "3.2.4"
     id("io.spring.dependency-management") version "1.1.3"
     id("com.github.ben-manes.versions") version "0.51.0"
+    id("org.springframework.boot") apply false
+    id("io.spring.dependency-management")
+    id("com.github.ben-manes.versions")
+    id("maven-publish")
 }
 
 group = "me.wilsonfranca"
@@ -30,13 +34,19 @@ repositories {
 
 val awsSdkVersion: String by project
 
+dependencyManagement {
+    imports {
+        mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
+        mavenBom("software.amazon.awssdk:bom:$awsSdkVersion")
+    }
+}
 dependencies {
-    implementation("org.testcontainers:testcontainers")
-    implementation("org.springframework.boot:spring-boot-testcontainers")
-    api(platform("software.amazon.awssdk:bom:$awsSdkVersion"))
-    implementation("org.springframework.boot:spring-boot-starter")
-    implementation("software.amazon.awssdk:dynamodb")
-    implementation("software.amazon.awssdk:dynamodb-enhanced")
+    api("org.testcontainers:testcontainers")
+    api("org.springframework.boot:spring-boot-testcontainers")
+    api("org.springframework.boot:spring-boot-starter")
+    api("software.amazon.awssdk:dynamodb")
+    api("software.amazon.awssdk:dynamodb-enhanced")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.boot:spring-boot-testcontainers")
