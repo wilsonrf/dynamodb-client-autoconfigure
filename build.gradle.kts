@@ -87,9 +87,15 @@ tasks.register("createNewPatchReleaseFromSnapshot") {
         val releaseVersion = version.replace("-SNAPSHOT", "")
         updateVersionInFiles(releaseVersion)
         createTagBeforeRelease(releaseVersion)
+
         val nextSnapshotVersion =
-            "${releaseVersion.split(".")[0]}.${releaseVersion.split(".")[1]}.${releaseVersion.split(".")[2].toInt() + 1}"
-        createSnapshotAfterRelease(nextSnapshotVersion)
+            "${releaseVersion.split(".")[0]}.${releaseVersion.split(".")[1]}.${releaseVersion.split(".")[2].toInt() + 1}-SNAPSHOT"
+        updateVersionInFiles(nextSnapshotVersion)
+    }
+}
+        val nextSnapshotVersion =
+            "${releaseVersion.split(".")[0]}.${releaseVersion.split(".")[1]}.${releaseVersion.split(".")[2].toInt() + 1}-SNAPSHOT"
+        updateVersionInFiles(nextSnapshotVersion)
     }
 }
 
@@ -117,49 +123,9 @@ fun updateVersionInFiles(version: String) {
     filesToBeUpdated().forEach {
         val file = File(it)
         val content = file.readText()
-        val updatedContent = content.replace(currentVersion(), version)
+        val currentVersion = currentVersion()
+        println("Updating version from $currentVersion to $version in file $it")
+        val updatedContent = content.replace(currentVersion, version)
         file.writeText(updatedContent)
-    }
-}
-
-fun createTagBeforeRelease(version: String, push: Boolean = false) {
-    val process = ProcessBuilder("git", "tag", "-a", version, "-m", "Release $version").start()
-    process.waitFor(10, TimeUnit.SECONDS)
-    val exitCode = process.exitValue()
-    if (exitCode != 0) {
-        throw RuntimeException("Failed to create tag")
-    }
-    if (push) {
-        val process1 = ProcessBuilder("git", "push", "origin", version).start()
-        process1.waitFor(10, TimeUnit.SECONDS)
-        val exitCode1 = process.exitValue()
-        if (exitCode1 != 0) {
-            throw RuntimeException("Failed to push tag")
-        }
-    }
-}
-
-fun createSnapshotAfterRelease(version: String, push: Boolean = false) {
-    val nextSnapshotVersion = "${version.split(".")[0]}.${version.split(".")[1]}.${version.split(".")[2]}-SNAPSHOT"
-    updateVersionInFiles(nextSnapshotVersion)
-    val process2 = ProcessBuilder("git", "add", ".").start()
-    process2.waitFor(10, TimeUnit.SECONDS)
-    val exitCode2 = process2.exitValue()
-    if (exitCode2 != 0) {
-        throw RuntimeException("Failed to add files")
-    }
-    val process3 = ProcessBuilder("git", "commit", "-m", "New snapshot version $nextSnapshotVersion").start()
-    process3.waitFor(10, TimeUnit.SECONDS)
-    val exitCode3 = process3.exitValue()
-    if (exitCode3 != 0) {
-        throw RuntimeException("Failed to commit changes")
-    }
-    if (push) {
-        val process4 = ProcessBuilder("git", "push", "origin", "main").start()
-        process4.waitFor(10, TimeUnit.SECONDS)
-        val exitCode4 = process4.exitValue()
-        if (exitCode4 != 0) {
-            throw RuntimeException("Failed to push changes")
-        }
     }
 }
