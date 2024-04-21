@@ -69,56 +69,61 @@ publishing {
     }
 }
 
-/**
- * This task will create a new patch release from the current snapshot version.
- * It will update the version in the files the version is present.
- * The release version is the current version without the -SNAPSHOT suffix taken from the main branch.
- * The task will create a tag in the git repository with the release version.
- * Next, it will push the tag to the remote repository.
- * Then it will create a new patch snapshot version in the main branch
- * updating the version in the files the version is present, commit
- * and push the changes to the remote repository.
- *
- */
-tasks.register("createNewPatchReleaseFromSnapshot") {
+tasks.register("writePatchSnapshotVersion") {
     group = "publishing"
+    dependsOn("build")
     doLast {
+        if (!isMainBranch()) {
+            println("Not in main branch. Skipping patch snapshot version.")
+            return@doLast
+        }
+        println("Writing patch snapshot version")
         val version = currentVersion()
-        val releaseVersion = version.replace("-SNAPSHOT", "")
-        updateVersionInFiles(releaseVersion)
-        createTagBeforeRelease(releaseVersion)
-
-        val nextSnapshotVersion =
-            "${releaseVersion.split(".")[0]}.${releaseVersion.split(".")[1]}.${releaseVersion.split(".")[2].toInt() + 1}-SNAPSHOT"
-        updateVersionInFiles(nextSnapshotVersion)
-    }
-}
-        val nextSnapshotVersion =
-            "${releaseVersion.split(".")[0]}.${releaseVersion.split(".")[1]}.${releaseVersion.split(".")[2].toInt() + 1}-SNAPSHOT"
+        println("Current version is $version")
+        val nextSnapshotVersion = "${currentMajor()}.${currentMinor()}.${currentPatch() + 1}-SNAPSHOT"
+        println("Next snapshot version is $nextSnapshotVersion")
         updateVersionInFiles(nextSnapshotVersion)
     }
 }
 
+/**
+ * This function returns the current version of the project.
+ */
 fun currentVersion(): String {
     return version.toString()
 }
 
+/**
+ * This function returns the current major version of the project.
+ */
 fun currentMajor(): Int {
     return currentVersion().split(".")[0].toInt()
 }
 
+/**
+ * This function returns the current minor version of the project.
+ */
 fun currentMinor(): Int {
     return version.toString().split(".")[1].toInt()
 }
 
+/**
+ * This function returns the current patch version of the project.
+ */
 fun currentPatch(): Int {
-    return version.toString().split(".")[2].toInt()
+    return version.toString().split(".")[2].replace("-SNAPSHOT", "").toInt()
 }
 
+/**
+ * This function returns the files that need to be updated with the new version.
+ */
 fun filesToBeUpdated(): List<String> {
-    return listOf("build.gradle.kts")
+    return listOf("gradle.properties")
 }
 
+/**
+ * This function updates the version in the files that need to be updated.
+ */
 fun updateVersionInFiles(version: String) {
     filesToBeUpdated().forEach {
         val file = File(it)
@@ -128,4 +133,20 @@ fun updateVersionInFiles(version: String) {
         val updatedContent = content.replace(currentVersion, version)
         file.writeText(updatedContent)
     }
+}
+
+/**
+ * This function checks if this is the current main branch.
+ */
+fun isMainBranch(): Boolean {
+    val gitCommand = "git rev-parse --abbrev-ref HEAD"
+    val process = ProcessBuilder(gitCommand.split(" ")).start()
+    process.waitFor(10, TimeUnit.SECONDS)
+    val exitCode = process.exitValue()
+    if (exitCode != 0) {
+        throw RuntimeException("Failed get current branch")
+    }
+    val currentBranch = process.inputStream.bufferedReader().readText().trim()
+    println("Current branch is $currentBranch")
+    return currentBranch == "main"
 }
