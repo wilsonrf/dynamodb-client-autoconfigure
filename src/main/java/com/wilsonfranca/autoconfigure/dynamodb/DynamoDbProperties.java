@@ -17,6 +17,15 @@ package com.wilsonfranca.autoconfigure.dynamodb;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+/**
+ * DynamoDB configuration properties.
+ *
+ * @author Wilson da Rocha França
+ * @since 1.0.0
+ *
+ * @param endpointOverride The endpoint override.
+ */
 @ConfigurationProperties("dynamodb")
-record DynamoDbProperties(String endpointOverride) {
-}
+record DynamoDbProperties(
+        String endpointOverride
+) {}

@@ -17,6 +17,16 @@ package com.wilsonfranca.autoconfigure.dynamodb;
 
 import org.springframework.boot.autoconfigure.service.connection.ConnectionDetails;
 
+/**
+ * Details for a DynamoDB connection.
+ * @author Wilson da Rocha França
+ * @since 1.0.0
+ */
 public interface DynamoDbConnectionDetails extends ConnectionDetails {
-    public String endpointOverride();
+
+    /**
+     * The endpoint override.
+     * @return The endpoint override.
+     */
+    String endpointOverride();
 }

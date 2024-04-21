@@ -17,6 +17,10 @@ package com.wilsonfranca.autoconfigure.dynamodb;
 
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Test Configuration for DynamoDB tests.
+ * @author Wilson da Rocha França
+ */
 @Configuration(proxyBeanMethods = false)
 public class DynamoDbTestConfiguration {
 }

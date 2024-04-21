@@ -19,28 +19,55 @@ import com.wilsonfranca.autoconfigure.dynamodb.DynamoDbConnectionDetails;
 import org.springframework.boot.testcontainers.service.connection.ContainerConnectionDetailsFactory;
 import org.springframework.boot.testcontainers.service.connection.ContainerConnectionSource;
 
+/**
+ * A factory for creating {@link DynamoDbConnectionDetails} from a {@link DynamoDbContainer}.
+ * @author Wilson da Rocha França
+ * @since 1.0.0
+ */
 public class DynamoDbContainerConnectionDetailsFactory extends ContainerConnectionDetailsFactory<DynamoDbContainer, DynamoDbConnectionDetails> {
 
+    private static final String DYNAMODB_CONNECTION_NAME = "dynamodb";
+
+    /**
+     * Creates a new {@link DynamoDbContainerConnectionDetailsFactory}.
+     */
     public DynamoDbContainerConnectionDetailsFactory() {
-        super("dynamodb");
+        super(DYNAMODB_CONNECTION_NAME);
     }
 
+    /**
+     * Creates a new {@link DynamoDbContainerConnectionDetails} from the given {@link ContainerConnectionSource}.
+     *
+     * @param source the source for the connection details.
+     * @return the connection details.
+     */
     @Override
     protected DynamoDbConnectionDetails getContainerConnectionDetails(ContainerConnectionSource<DynamoDbContainer> source) {
         return new DynamoDbContainerConnectionDetails(source);
     }
 
+    /**
+     * {@link DynamoDbConnectionDetails} implementation for a {@link DynamoDbContainer}.
+     */
     protected static class DynamoDbContainerConnectionDetails
             extends ContainerConnectionDetails<DynamoDbContainer>
             implements DynamoDbConnectionDetails {
 
+        /**
+         * Creates a new {@link DynamoDbContainerConnectionDetails} from the given {@link ContainerConnectionSource}.
+         *
+         * @param source the source for the connection details.
+         */
         protected DynamoDbContainerConnectionDetails(ContainerConnectionSource<DynamoDbContainer> source) {
             super(source);
         }
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
-            public String endpointOverride() {
-                return "http://" + getContainer().getHost() + ":" + getContainer().getFirstMappedPort();
-            }
+        public String endpointOverride() {
+            return "http://" + getContainer().getHost() + ":" + getContainer().getFirstMappedPort();
         }
+    }
 }

@@ -38,6 +38,10 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import static org.assertj.core.api.Assertions.assertThat;
 import static software.amazon.awssdk.enhanced.dynamodb.mapper.StaticAttributeTags.primaryPartitionKey;
 
+/**
+ * Integration tests for {@link DynamoDbContainerConnectionDetailsFactory}.
+ * @author Wilson da Rocha França
+ */
 @SpringJUnitConfig
 @Testcontainers(disabledWithoutDocker = true)
 class DynamoDbContainerConnectionDetailsFactoryIntegrationTest {
@@ -48,7 +52,7 @@ class DynamoDbContainerConnectionDetailsFactoryIntegrationTest {
 
     @Container
     @ServiceConnection(value = "dynamoDb")
-    private static final DynamoDbContainer dynamoDb = new DynamoDbContainer("amazon/dynamodb-local:latest")
+    private static final DynamoDbContainer dynamoDb = new DynamoDbContainer()
             .withExposedPorts(DYNAMODB_PORT)
             .withLogConsumer(logConsumer);
 

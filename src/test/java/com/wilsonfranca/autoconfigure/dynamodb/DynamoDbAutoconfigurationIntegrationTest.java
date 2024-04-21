@@ -36,6 +36,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static software.amazon.awssdk.enhanced.dynamodb.mapper.StaticAttributeTags.primaryPartitionKey;
 
+/**
+ * Integration tests for {@link DynamoDbAutoconfiguration}.
+ * @author Wilson da Rocha França
+ */
 @Testcontainers(disabledWithoutDocker = true)
 class DynamoDbAutoconfigurationIntegrationTest {
 

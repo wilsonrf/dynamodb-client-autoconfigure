@@ -17,9 +17,46 @@ package com.wilsonfranca.service.connection.dynamodb;
 
 import org.testcontainers.containers.GenericContainer;
 
+/**
+ * A container based on a {@link GenericContainer} for DynamoDBLocal.
+ * @author Wilson da Rocha França
+ * @since 1.0.0
+ */
 public final class DynamoDbContainer extends GenericContainer<DynamoDbContainer> {
 
-    public DynamoDbContainer(String imageName) {
-        super(imageName);
+    /**
+     * The default image for the container.
+     */
+    private static final String DYNAMO_DB_IMAGE = "amazon/dynamodb-local";
+
+    /**
+     * The default tag for the container.
+     */
+    private static final String DYNAMO_DB_IMAGE_TAG = "latest";
+
+    /**
+     * Creates a new container with the default image and tag.
+     */
+    public DynamoDbContainer() {
+        this(DYNAMO_DB_IMAGE, DYNAMO_DB_IMAGE_TAG);
+    }
+
+    /**
+     * Creates a new container with the specified tag.
+     *
+     * @param tag the tag for the container
+     */
+    public DynamoDbContainer(String tag) {
+        this(DYNAMO_DB_IMAGE, tag);
+    }
+
+    /**
+     * Creates a new container with the specified image and tag.
+     *
+     * @param image the image for the container
+     * @param tag the tag for the container
+     */
+    private DynamoDbContainer(String image, String tag) {
+        super(image + ":" + tag);
     }
 }

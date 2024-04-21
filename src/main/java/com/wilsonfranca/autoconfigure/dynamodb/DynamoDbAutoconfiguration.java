@@ -17,6 +17,7 @@ package com.wilsonfranca.autoconfigure.dynamodb;
 
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -25,6 +26,11 @@ import org.springframework.context.annotation.Bean;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClientBuilder;
 
+/**
+ * {@link EnableAutoConfiguration Auto-configuration} for DynamoDB.
+ * @author Wilson da Rocha França
+ * @since 1.0.0
+ */
 @AutoConfiguration
 @ConditionalOnClass(DynamoDbClient.class)
 @EnableConfigurationProperties(DynamoDbProperties.class)

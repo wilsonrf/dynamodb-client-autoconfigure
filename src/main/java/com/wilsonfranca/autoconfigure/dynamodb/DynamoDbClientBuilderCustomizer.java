@@ -15,10 +15,22 @@
  */
 package com.wilsonfranca.autoconfigure.dynamodb;
 
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClientBuilder;
 
+/**
+ * Callback interface that can be implemented by beans wishing to customize the
+ * {@link DynamoDbClientBuilder} via a {@link DynamoDbClientBuilderCustomizer} whilst building a
+ * {@link DynamoDbClient}.
+ * @author Wilson da Rocha França
+ * @since 1.0.0
+ */
 @FunctionalInterface
 public interface DynamoDbClientBuilderCustomizer {
 
+    /**
+     * Customize the {@link DynamoDbClientBuilder}.
+     * @param builder the builder to customize
+     */
     void customize(DynamoDbClientBuilder builder);
 }

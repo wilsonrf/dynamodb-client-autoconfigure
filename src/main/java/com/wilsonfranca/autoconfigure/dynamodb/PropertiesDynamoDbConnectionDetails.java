@@ -14,15 +14,29 @@
  * limitations under the License.
  */
 package com.wilsonfranca.autoconfigure.dynamodb;
-
+/**
+ * Adapts {@link DynamoDbProperties} to {@link DynamoDbConnectionDetails}.
+ * @author Wilson da Rocha França
+ * @since 1.0.0
+ */
 public class PropertiesDynamoDbConnectionDetails implements DynamoDbConnectionDetails {
 
+    /**
+     * The DynamoDB properties to be adapted.
+     */
     private final DynamoDbProperties dynamoDbProperties;
 
+    /**
+     * Creates a new {@link PropertiesDynamoDbConnectionDetails}.
+     * @param dynamoDbProperties The DynamoDB properties.
+     */
     public PropertiesDynamoDbConnectionDetails(DynamoDbProperties dynamoDbProperties) {
         this.dynamoDbProperties = dynamoDbProperties;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String endpointOverride() {
         return this.dynamoDbProperties.endpointOverride();

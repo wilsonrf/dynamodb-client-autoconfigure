@@ -21,14 +21,30 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClientBuilder;
 
 import java.net.URI;
 
+/**
+ * {@link DynamoDbClientBuilderCustomizer} that sets the endpoint override on the builder.
+ * @author Wilson da Rocha França
+ * @since 1.0.0
+ */
 public class EndpointOverrideDynamoDbClientBuilderCustomizer implements DynamoDbClientBuilderCustomizer, Ordered {
 
+    /**
+     * The endpoint override.
+     */
     private final String endpointOverride;
 
+    /**
+     * Create a new {@link EndpointOverrideDynamoDbClientBuilderCustomizer} instance.
+     * @param endpointOverride The endpoint override.
+     */
     public EndpointOverrideDynamoDbClientBuilderCustomizer(String endpointOverride) {
         this.endpointOverride = endpointOverride;
     }
 
+    /**
+     * Customize the {@link DynamoDbClientBuilder}.
+     * @param builder the builder to customize
+     */
     @Override
     public void customize(DynamoDbClientBuilder builder) {
         if (StringUtils.hasText(endpointOverride)) {
@@ -36,6 +52,10 @@ public class EndpointOverrideDynamoDbClientBuilderCustomizer implements DynamoDb
         }
     }
 
+    /**
+     * Get the order of this object.
+     * @return The order.
+     */
     @Override
     public int getOrder() {
         return 0;

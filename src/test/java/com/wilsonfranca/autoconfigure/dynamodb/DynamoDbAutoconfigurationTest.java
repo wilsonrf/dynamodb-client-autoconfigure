@@ -22,6 +22,10 @@ import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests for {@link DynamoDbAutoconfiguration}.
+ * @author Wilson da Rocha França
+ */
 class DynamoDbAutoconfigurationTest {
 
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
