@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package me.wilsonfranca.autoconfigure.dynamodb;
+package com.wilsonfranca.autoconfigure.dynamodb;
 
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;

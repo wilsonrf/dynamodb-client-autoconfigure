@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package me.wilsonfranca.service.connection.dynamodb;
+package com.wilsonfranca.service.connection.dynamodb;
 
-import me.wilsonfranca.autoconfigure.dynamodb.DynamoDbConnectionDetails;
+import com.wilsonfranca.autoconfigure.dynamodb.DynamoDbConnectionDetails;
 import org.springframework.boot.testcontainers.service.connection.ContainerConnectionDetailsFactory;
 import org.springframework.boot.testcontainers.service.connection.ContainerConnectionSource;
 

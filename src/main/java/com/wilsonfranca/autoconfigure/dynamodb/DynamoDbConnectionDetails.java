@@ -13,12 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package me.wilsonfranca.autoconfigure.dynamodb;
+package com.wilsonfranca.autoconfigure.dynamodb;
 
-import software.amazon.awssdk.services.dynamodb.DynamoDbClientBuilder;
+import org.springframework.boot.autoconfigure.service.connection.ConnectionDetails;
 
-@FunctionalInterface
-public interface DynamoDbClientBuilderCustomizer {
-
-    void customize(DynamoDbClientBuilder builder);
+public interface DynamoDbConnectionDetails extends ConnectionDetails {
+    public String endpointOverride();
 }

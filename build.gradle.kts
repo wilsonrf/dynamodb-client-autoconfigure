@@ -21,8 +21,7 @@ plugins {
     id("maven-publish")
 }
 
-group = "me.wilsonfranca"
-version = "1.0.0"
+group = "com.wilsonfranca"
 
 repositories {
     mavenLocal()

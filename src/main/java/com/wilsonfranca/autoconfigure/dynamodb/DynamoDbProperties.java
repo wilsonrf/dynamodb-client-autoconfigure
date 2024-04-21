@@ -13,18 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package me.wilsonfranca.autoconfigure.dynamodb;
+package com.wilsonfranca.autoconfigure.dynamodb;
 
-public class PropertiesDynamoDbConnectionDetails implements DynamoDbConnectionDetails {
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
-    private final DynamoDbProperties dynamoDbProperties;
-
-    public PropertiesDynamoDbConnectionDetails(DynamoDbProperties dynamoDbProperties) {
-        this.dynamoDbProperties = dynamoDbProperties;
-    }
-
-    @Override
-    public String endpointOverride() {
-        return this.dynamoDbProperties.endpointOverride();
-    }
+@ConfigurationProperties("dynamodb")
+record DynamoDbProperties(String endpointOverride) {
 }
