@@ -48,7 +48,7 @@ class DynamoDbAutoconfigurationIntegrationTest {
     private static final Slf4jLogConsumer logConsumer = new Slf4jLogConsumer(logger);
 
     @Container
-    private static final DynamoDbContainer dynamoDb = new DynamoDbContainer("amazon/dynamodb-local:latest")
+    private static final DynamoDbContainer dynamoDb = new DynamoDbContainer()
             .withLogConsumer(logConsumer)
             .withExposedPorts(DYNAMO_DB_PORT);
 
