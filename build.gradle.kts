@@ -54,19 +54,15 @@ tasks.test {
     useJUnitPlatform()
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("mavenJava") {
-            versionMapping {
-                usage("java-api") {
-                    fromResolutionOf("runtimeClasspath")
-                }
-                usage("java-runtime") {
-                    fromResolutionResult()
-                }
-            }
-        }
-    }
+tasks.register<Jar>("sourcesJar") {
+    archiveClassifier.set("sources")
+    from(sourceSets["main"].allSource)
+}
+
+tasks.register<Jar>("javadocJar") {
+    dependsOn("javadoc")
+    archiveClassifier.set("javadoc")
+    from(tasks["javadoc"].outputs)
 }
 
 tasks.register("writePatchSnapshotVersion") {
@@ -83,6 +79,24 @@ tasks.register("writePatchSnapshotVersion") {
         val nextSnapshotVersion = "${currentMajor()}.${currentMinor()}.${currentPatch() + 1}-SNAPSHOT"
         println("Next snapshot version is $nextSnapshotVersion")
         updateVersionInFiles(nextSnapshotVersion)
+    }
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+            artifact(tasks["sourcesJar"])
+            artifact(tasks["javadocJar"])
+            versionMapping {
+                usage("java-api") {
+                    fromResolutionOf("runtimeClasspath")
+                }
+                usage("java-runtime") {
+                    fromResolutionResult()
+                }
+            }
+        }
     }
 }
 
