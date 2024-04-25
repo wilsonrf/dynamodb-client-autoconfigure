@@ -23,9 +23,17 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author Wilson da Rocha França
  * @since 1.0.0
  *
- * @param endpointOverride The endpoint override.
  */
 @ConfigurationProperties("dynamodb")
-record DynamoDbProperties(
-        String endpointOverride
-) {}
+public class DynamoDbProperties {
+
+    private String endpointOverride;
+
+    public String getEndpointOverride() {
+        return endpointOverride;
+    }
+
+    public void setEndpointOverride(String endpointOverride) {
+        this.endpointOverride = endpointOverride;
+    }
+}

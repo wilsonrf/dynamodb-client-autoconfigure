@@ -39,6 +39,6 @@ public class PropertiesDynamoDbConnectionDetails implements DynamoDbConnectionDe
      */
     @Override
     public String endpointOverride() {
-        return this.dynamoDbProperties.endpointOverride();
+        return this.dynamoDbProperties.getEndpointOverride();
     }
 }
