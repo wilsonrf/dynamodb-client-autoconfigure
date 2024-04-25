@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wilsonfranca.service.connection.dynamodb;
+package com.wilsonfranca.autoconfigure.dynamodb;
 
 import org.testcontainers.containers.GenericContainer;
 

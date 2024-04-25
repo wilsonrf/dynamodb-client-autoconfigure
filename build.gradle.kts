@@ -1,3 +1,6 @@
+import groovy.namespace.QName
+import groovy.util.Node
+
 /*
 * Copyright 2024 Wilson da Rocha França
 *
@@ -14,6 +17,7 @@
 * limitations under the License.
  */
 plugins {
+    id("base")
     id("java-library")
     id("org.springframework.boot") apply false
     id("io.spring.dependency-management")
@@ -30,6 +34,10 @@ repositories {
 
 val awsSdkVersion: String by project
 
+val optional = configurations.create("optional") {
+    isCanBeConsumed = false
+    isCanBeResolved = true
+}
 dependencyManagement {
     imports {
         mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
@@ -37,11 +45,12 @@ dependencyManagement {
     }
 }
 dependencies {
-    api("org.testcontainers:testcontainers")
-    api("org.springframework.boot:spring-boot-testcontainers")
-    api("org.springframework.boot:spring-boot-starter")
+
+    implementation("org.springframework.boot:spring-boot-starter")
     api("software.amazon.awssdk:dynamodb")
+    add("optional", "software.amazon.awssdk:dynamodb")
     api("software.amazon.awssdk:dynamodb-enhanced")
+    add("optional", "software.amazon.awssdk:dynamodb-enhanced")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

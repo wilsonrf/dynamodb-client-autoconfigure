@@ -46,7 +46,7 @@ public class DynamoDbAutoconfiguration {
 
     @Bean
     @ConditionalOnMissingBean(DynamoDbConnectionDetails.class)
-    public PropertiesDynamoDbConnectionDetails propertiesDynamoDbConnectionDetails(DynamoDbProperties dynamoDbProperties) {
+    public DynamoDbConnectionDetails propertiesDynamoDbConnectionDetails(DynamoDbProperties dynamoDbProperties) {
         return new PropertiesDynamoDbConnectionDetails(dynamoDbProperties);
     }
 
