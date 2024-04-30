@@ -1,0 +1,66 @@
+= DynamoDB client auto-configuration
+
+:github: https://github.com/wilsonrf/dynamodb-client-autoconfigure
+:starterGithubRepo: https://github.com/wilsonrf/dynamodb-client-starter
+== Key Features
+The DynamoDB client auto-configuration project provides a Spring Boot auto-configuration for the AWS SDK DynamoDB client. The auto-configuration creates a DynamoDB client bean that you can use to interact with DynamoDB in your Spring Boot application.
+By adding the DynamoDB client auto-configuration to your Spring Boot application, you can use the DynamoDB client without having to create the client bean manually.
+You will have available in the Spring context:
+    * A DynamoDb client of type `software.amazon.awssdk.services.dynamodb.DynamoDbClient` is available in the Spring context.
+    * A DynamoDbConnectionDetails based on the `dynamodb-client` prefix is available in the Spring context too.
+
+
+== Installation
+To use the DynamoDB client auto-configuration in your Spring Boot application, add the following dependency to your dependencies:
+
+=== Maven
+[source,xml]
+----
+<dependency>
+    <groupId>com.wilsonfranca</groupId>
+    <artifactId>dynamodb-client-autoconfigure</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+</dependency>
+----
+=== Gradle Groovy
+[source,groovy]
+----
+implementation 'com.wilsonfranca:dynamodb-client-autoconfigure:1.0.0-SNAPSHOT'
+----
+=== Gradle Kotlin
+[source,kotlin]
+----
+implementation("com.wilsonfranca:dynamodb-client-autoconfigure:1.0.0-SNAPSHOT")
+----
+
+== Usage
+
+It's recommended to use the {starterGithubRepo}[dynamodb-client-starter] to configure the DynamoDB client in your Spring Boot application. The starter provides a DynamoDB client bean that you can use to interact with DynamoDB.
+By default, the client will use the default AWS configuration of your environment. If you want to override the endpoint, you can use the `dynamodb-client.endpoint-override` property.
+
+== Configuration
+You can configure the DynamoDB client using the following properties:
+[source,properties]
+----
+dynamodb-client.endpoint-override: The endpoint to use when connecting to DynamoDB. If not set, the default endpoint is used.
+----
+== Reporting Issues
+You can report issues at {github}/issues[GitHub].
+
+== Building from Source
+
+The DynamoDB client auto-configuration project uses a Gradle-based build system. In the instructions below, `./gradlew` is invoked from the root of the project and serves as a cross-platform, self-contained bootstrap mechanism for the build.
+You will need a Java Development Kit (JDK) 21 to build the project.
+[source,shell]
+----
+$ ./gradlew publishToMavenLocal
+----
+
+[source,shell]
+----
+$ ./gradlew build
+----
+
+== License
+
+DynamoDB client auto-configuration is Open Source software released under the https://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0 license].
