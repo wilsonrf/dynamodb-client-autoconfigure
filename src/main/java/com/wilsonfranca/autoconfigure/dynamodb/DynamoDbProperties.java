@@ -24,7 +24,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @since 1.0.0
  *
  */
-@ConfigurationProperties("dynamodb")
+@ConfigurationProperties("dynamodb-client")
 public class DynamoDbProperties {
 
     private String endpointOverride;

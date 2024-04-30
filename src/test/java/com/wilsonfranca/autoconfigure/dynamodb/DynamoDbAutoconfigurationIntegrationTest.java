@@ -58,7 +58,7 @@ class DynamoDbAutoconfigurationIntegrationTest {
     @Test
     void clientCanConnectWithEndpointOverride() {
         contextRunner
-                .withPropertyValues("dynamodb.endpoint-override=http://localhost:" + dynamoDb.getMappedPort(DYNAMO_DB_PORT))
+                .withPropertyValues("dynamodb-client.endpoint-override=http://localhost:" + dynamoDb.getMappedPort(DYNAMO_DB_PORT))
                 .run(context -> {
             assertTrue(context.containsBean("dynamoDbClient"));
             assertNotNull(context.getBean(DynamoDbClient.class));
