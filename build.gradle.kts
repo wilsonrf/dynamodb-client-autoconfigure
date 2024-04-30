@@ -1,6 +1,3 @@
-import groovy.namespace.QName
-import groovy.util.Node
-
 /*
 * Copyright 2024 Wilson da Rocha França
 *
@@ -33,11 +30,6 @@ repositories {
 }
 
 val awsSdkVersion: String by project
-
-val optional = configurations.create("optional") {
-    isCanBeConsumed = false
-    isCanBeResolved = true
-}
 dependencyManagement {
     imports {
         mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
@@ -48,9 +40,7 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter")
     api("software.amazon.awssdk:dynamodb")
-    add("optional", "software.amazon.awssdk:dynamodb")
     api("software.amazon.awssdk:dynamodb-enhanced")
-    add("optional", "software.amazon.awssdk:dynamodb-enhanced")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     annotationProcessor("org.springframework.boot:spring-boot-autoconfigure-processor")
     testImplementation("org.junit.jupiter:junit-jupiter")
@@ -98,6 +88,7 @@ publishing {
             from(components["java"])
             artifact(tasks["sourcesJar"])
             artifact(tasks["javadocJar"])
+
             versionMapping {
                 usage("java-api") {
                     fromResolutionOf("runtimeClasspath")
@@ -142,7 +133,7 @@ fun currentPatch(): Int {
  * This function returns the files that need to be updated with the new version.
  */
 fun filesToBeUpdated(): List<String> {
-    return listOf("gradle.properties")
+    return listOf("gradle.properties", "README.adoc")
 }
 
 /**
