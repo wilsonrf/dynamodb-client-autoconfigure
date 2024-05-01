@@ -20,6 +20,7 @@ plugins {
     id("io.spring.dependency-management")
     id("com.github.ben-manes.versions")
     id("maven-publish")
+    id("signing")
 }
 
 group = "com.wilsonfranca"
@@ -97,9 +98,58 @@ publishing {
                     fromResolutionResult()
                 }
             }
+
+            pom {
+                name = "DynamoDB Client Autoconfigure"
+                description = "DynamoDB Client Autoconfigure"
+                url = "https://github.com/wilsonrf/dynamodb-client-autoconfigure"
+                licenses {
+                    license {
+                        name = "The Apache License, Version 2.0"
+                        url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                    }
+                }
+                developers {
+                    developer {
+                        id = "wilsonrf"
+                        name = "Wilson da Rocha França"
+                        email = "wilsonrf@gmail.com"
+                    }
+                }
+                scm {
+                    connection = "scm:git:git://github.com/dynamodb-client-autoconfigure.git"
+                    developerConnection = "scm:git:ssh://github.com/dynamodb-client-autoconfigure.git"
+                    url = "https://github.com/wilsonrf/dynamodb-client-autoconfigure"
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                name = "OSSHR"
+                url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+                credentials {
+                    username = System.getenv("MAVEN_USERNAME")
+                    password = System.getenv("MAVEN_PASSWORD")
+                }
+            }
         }
     }
 }
+
+signing {
+    setRequired {
+        gradle.taskGraph.allTasks.any { it is PublishToMavenLocal }.not()
+    }
+
+    val signingKey: String? by project
+    val signingPassword: String? by project
+
+    useInMemoryPgpKeys(signingKey, signingPassword)
+
+    sign(publishing.publications["mavenJava"])
+}
+
 
 /**
  * This function returns the current version of the project.
