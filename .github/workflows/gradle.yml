@@ -8,6 +8,8 @@
 name: Java CI with Gradle
 env:
   AWS_REGION: 'test'
+  AWS_ACCESS_KEY_ID: 'test'
+  AWS_SECRET_ACCESS_KEY: 'test'
 on:
   push:
     branches: [ "main" ]
