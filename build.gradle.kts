@@ -21,6 +21,7 @@ plugins {
     id("com.github.ben-manes.versions")
     id("maven-publish")
     id("signing")
+    id("jacoco")
 }
 
 group = "com.wilsonfranca"
@@ -54,6 +55,14 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
     testLogging { exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL }
+    finalizedBy("jacocoTestReport")
+}
+
+tasks.jacocoTestReport {
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
 }
 
 tasks.register<Jar>("sourcesJar") {
@@ -130,8 +139,8 @@ publishing {
                 name = "OSSHR"
                 url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
                 credentials {
-                    username = System.getenv("MAVEN_USERNAME")
-                    password = System.getenv("MAVEN_PASSWORD")
+                    username = System.getenv("MAVEN_CENTRAL_USERNAME")
+                    password = System.getenv("MAVEN_CENTRAL_PASSWORD")
                 }
             }
         }
@@ -150,7 +159,6 @@ signing {
 
     sign(publishing.publications["mavenJava"])
 }
-
 
 /**
  * This function returns the current version of the project.
