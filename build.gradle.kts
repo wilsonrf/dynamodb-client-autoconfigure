@@ -1,3 +1,5 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
 /*
 * Copyright 2024 Wilson da Rocha França
 *
@@ -20,6 +22,7 @@ plugins {
     id("io.spring.dependency-management")
     id("com.github.ben-manes.versions")
     id("maven-publish")
+    id("com.vanniktech.maven.publish")
     id("signing")
     id("jacoco")
 }
@@ -136,19 +139,6 @@ publishing {
 
         repositories {
             maven {
-                name = "OSSHR"
-                if (isMainBranch() && version.toString().contains("-SNAPSHOT")) {
-                    url = uri("https://oss.sonatype.org/content/repositories/snapshots/")
-                } else {
-                    url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
-                }
-
-                credentials {
-                    username = System.getenv("MAVEN_CENTRAL_USERNAME")
-                    password = System.getenv("MAVEN_CENTRAL_PASSWORD")
-                }
-            }
-            maven {
                 name = "GitHubPackages"
                 url = uri("https://maven.pkg.github.com/wilsonrf/dynamodb-client-autoconfigure")
                 credentials {
@@ -156,6 +146,35 @@ publishing {
                     password = System.getenv("GITHUB_TOKEN")
                 }
             }
+        }
+    }
+}
+
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    signAllPublications()
+
+    pom {
+        name = "DynamoDB Client Autoconfigure"
+        description = "DynamoDB Client Autoconfigure"
+        url = "https://github.com/wilsonrf/dynamodb-client-autoconfigure"
+        licenses {
+            license {
+                name = "The Apache License, Version 2.0"
+                url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+            }
+        }
+        developers {
+            developer {
+                id = "wilsonrf"
+                name = "Wilson da Rocha França"
+                email = "wilsonrf@gmail.com"
+            }
+        }
+        scm {
+            connection = "scm:git:git://github.com/dynamodb-client-autoconfigure.git"
+            developerConnection = "scm:git:ssh://github.com/dynamodb-client-autoconfigure.git"
+            url = "https://github.com/wilsonrf/dynamodb-client-autoconfigure"
         }
     }
 }
