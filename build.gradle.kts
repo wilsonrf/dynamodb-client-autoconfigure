@@ -137,10 +137,23 @@ publishing {
         repositories {
             maven {
                 name = "OSSHR"
-                url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+                if (isMainBranch() && version.toString().contains("-SNAPSHOT")) {
+                    url = uri("https://oss.sonatype.org/content/repositories/snapshots/")
+                } else {
+                    url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+                }
+
                 credentials {
                     username = System.getenv("MAVEN_CENTRAL_USERNAME")
                     password = System.getenv("MAVEN_CENTRAL_PASSWORD")
+                }
+            }
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/octocat/hello-worl")
+                credentials {
+                    username = System.getenv("GITHUB_ACTOR")
+                    password = System.getenv("GITHUB_TOKEN")
                 }
             }
         }
