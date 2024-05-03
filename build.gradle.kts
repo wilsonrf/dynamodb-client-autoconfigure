@@ -150,7 +150,7 @@ publishing {
             }
             maven {
                 name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/octocat/hello-worl")
+                url = uri("https://maven.pkg.github.com/wilsonrf/dynamodb-client-autoconfigure")
                 credentials {
                     username = System.getenv("GITHUB_ACTOR")
                     password = System.getenv("GITHUB_TOKEN")
