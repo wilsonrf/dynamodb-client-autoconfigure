@@ -1,4 +1,4 @@
-import com.vanniktech.maven.publish.SonatypeHost
+
 
 /*
 * Copyright 2024 Wilson da Rocha França
@@ -22,7 +22,6 @@ plugins {
     id("io.spring.dependency-management")
     id("com.github.ben-manes.versions")
     id("maven-publish")
-    id("com.vanniktech.maven.publish")
     id("signing")
     id("jacoco")
 }
@@ -96,6 +95,22 @@ tasks.register("writePatchSnapshotVersion") {
     }
 }
 
+tasks.register<Zip>("packageAll") {
+    dependsOn("build", "javadocJar", "sourcesJar")
+    from("build/libs")
+    archiveFileName.set("dynamodb-client-autoconfigure.zip")
+    destinationDirectory.set(file("build/distributions"))
+}
+
+val zipArtifacts by tasks.registering(Zip::class) {
+    dependsOn("publishMavenJavaPublicationToInternalRepoRepository")
+    from("${layout.buildDirectory.get()}/repo") {
+        exclude("**/maven-metadata*.*")
+    }
+    archiveFileName.set("${project.name}-${version}.zip")
+    destinationDirectory.set(file("${layout.buildDirectory.get()}/outputs"))
+}
+
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
@@ -138,6 +153,12 @@ publishing {
         }
 
         repositories {
+
+            maven {
+                name = "internalRepo"
+                url = uri("${layout.buildDirectory.get()}/repo") // Output the publications here first
+            }
+
             maven {
                 name = "GitHubPackages"
                 url = uri("https://maven.pkg.github.com/wilsonrf/dynamodb-client-autoconfigure")
@@ -146,35 +167,6 @@ publishing {
                     password = System.getenv("GITHUB_TOKEN")
                 }
             }
-        }
-    }
-}
-
-mavenPublishing {
-    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
-    signAllPublications()
-
-    pom {
-        name = "DynamoDB Client Autoconfigure"
-        description = "DynamoDB Client Autoconfigure"
-        url = "https://github.com/wilsonrf/dynamodb-client-autoconfigure"
-        licenses {
-            license {
-                name = "The Apache License, Version 2.0"
-                url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
-            }
-        }
-        developers {
-            developer {
-                id = "wilsonrf"
-                name = "Wilson da Rocha França"
-                email = "wilsonrf@gmail.com"
-            }
-        }
-        scm {
-            connection = "scm:git:git://github.com/dynamodb-client-autoconfigure.git"
-            developerConnection = "scm:git:ssh://github.com/dynamodb-client-autoconfigure.git"
-            url = "https://github.com/wilsonrf/dynamodb-client-autoconfigure"
         }
     }
 }
