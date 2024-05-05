@@ -2,7 +2,7 @@ name: Publish Release
 on:
   push:
     tags:
-      - v1.1.[0-9]+
+      - v1.[0-9]+.[0-9]+
 jobs:
   publish-release:
     runs-on: ubuntu-latest
@@ -22,6 +22,13 @@ jobs:
         uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
       - name: Zip artifacts with Gradle Wrapper
         run: ./gradlew clean build zipArtifacts
+        env:
+          AWS_REGION: 'test'
+          AWS_ACCESS_KEY_ID: 'test'
+          AWS_SECRET_ACCESS_KEY: 'test'
+          ORG_GRADLE_PROJECT_signingKey: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGKEY }}
+          ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGKEYID }}
+          ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGPASSWORD }}
       - name: Get Version
         id: get_version
         shell: bash
@@ -33,14 +40,11 @@ jobs:
         run: |
           curl -X POST \
                --verbose \
-               --form bundle=@build/outputs/dynamodb-client-autoconfigure-${{ needs.publish-release.outputs.version }}.zip \
+               --form bundle=@build/outputs/dynamodb-client-autoconfigure-${{ steps.get_version.outputs.version }}.zip \
                -H "Authorization: Bearer ${{ secrets.API_TOKEN }}" \
                "https://central.sonatype.com/api/v1/publisher/upload"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ORG_GRADLE_PROJECT_signingKey: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGKEY }}
-          ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGKEYID }}
-          ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGPASSWORD }}
           API_TOKEN: ${{ secrets.API_TOKEN }}
   create-github-release:
     name: Create GitHub Release
@@ -48,10 +52,9 @@ jobs:
       - publish-release
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: softprops/action-gh-release@v1
       - name: Create Release
         id: create_release
-        uses: softprops/action-gh-release@v1
         shell: bash
         run: gh release create ${{ format('v{0}', needs.publish-release.outputs.version) }}
         env:
