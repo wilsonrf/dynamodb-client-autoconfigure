@@ -95,13 +95,6 @@ tasks.register("writePatchSnapshotVersion") {
     }
 }
 
-tasks.register<Zip>("packageAll") {
-    dependsOn("build", "javadocJar", "sourcesJar")
-    from("build/libs")
-    archiveFileName.set("dynamodb-client-autoconfigure.zip")
-    destinationDirectory.set(file("build/distributions"))
-}
-
 val zipArtifacts by tasks.registering(Zip::class) {
     dependsOn("publishMavenJavaPublicationToInternalRepoRepository")
     from("${layout.buildDirectory.get()}/repo") {
@@ -156,7 +149,7 @@ publishing {
 
             maven {
                 name = "internalRepo"
-                url = uri("${layout.buildDirectory.get()}/repo") // Output the publications here first
+                url = uri("${layout.buildDirectory.get()}/repo")
             }
 
             maven {
