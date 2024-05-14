@@ -138,8 +138,8 @@ publishing {
                     }
                 }
                 scm {
-                    connection = "scm:git:git://github.com/dynamodb-client-autoconfigure.git"
-                    developerConnection = "scm:git:ssh://github.com/dynamodb-client-autoconfigure.git"
+                    connection = "scm:git:git@github.com:wilsonrf/dynamodb-client-autoconfigure.git"
+                    developerConnection = "scm:git:git@github.com:wilsonrf/dynamodb-client-autoconfigure.git"
                     url = "https://github.com/wilsonrf/dynamodb-client-autoconfigure"
                 }
             }
