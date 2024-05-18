@@ -48,14 +48,15 @@ jobs:
           API_TOKEN: ${{ secrets.API_TOKEN }}
   create-github-release:
     name: Create GitHub Release
+    permissions:
+      contents: write
     needs:
       - publish-release
     runs-on: ubuntu-latest
     steps:
-      - uses: softprops/action-gh-release@v1
+      - uses: actions/checkout@v4
       - name: Create Release
+        uses: softprops/action-gh-release@v2
         id: create_release
-        shell: bash
-        run: gh release create ${{ format('v{0}', needs.publish-release.outputs.version) }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
