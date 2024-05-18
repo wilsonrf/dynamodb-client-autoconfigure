@@ -4,3 +4,11 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+    versioning-strategy: "increase"
+    groups:
+      security-updates:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
