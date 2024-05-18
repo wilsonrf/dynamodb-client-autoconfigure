@@ -6,10 +6,7 @@
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
 
 name: Build and Test
-env:
-  AWS_REGION: 'test'
-  AWS_ACCESS_KEY_ID: 'test'
-  AWS_SECRET_ACCESS_KEY: 'test'
+
 on:
   push:
     branches: [ "main" ]
@@ -21,6 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      packages: write
     steps:
     - uses: actions/checkout@v4
     - name: Set up JDK 17
@@ -31,7 +29,15 @@ jobs:
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
     - name: Build with Gradle Wrapper
-      run: ./gradlew build
+      run: ./gradlew build publishMavenJavaPublicationToGitHubPackagesRepository
+      env:
+        AWS_REGION: ${{ secrets.AWS_REGION }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        ORG_GRADLE_PROJECT_signingKey: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGKEY }}
+        ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGKEYID }}
+        ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.ORG_GRADLE_PROJECT_SIGNINGPASSWORD }}
 
   dependency-submission:
     runs-on: ubuntu-latest
