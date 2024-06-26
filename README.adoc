@@ -19,18 +19,18 @@ To use the DynamoDB client auto-configuration in your Spring Boot application, a
 <dependency>
     <groupId>com.wilsonfranca</groupId>
     <artifactId>dynamodb-client-autoconfigure</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
 </dependency>
 ----
 === Gradle Groovy
 [source,groovy]
 ----
-implementation 'com.wilsonfranca:dynamodb-client-autoconfigure:1.0.1-SNAPSHOT'
+implementation 'com.wilsonfranca:dynamodb-client-autoconfigure:1.0.1'
 ----
 === Gradle Kotlin
 [source,kotlin]
 ----
-implementation("com.wilsonfranca:dynamodb-client-autoconfigure:1.0.1-SNAPSHOT")
+implementation("com.wilsonfranca:dynamodb-client-autoconfigure:1.0.1")
 ----
 
 == Usage
